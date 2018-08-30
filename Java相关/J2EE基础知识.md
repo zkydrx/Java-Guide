@@ -1,12 +1,36 @@
+<!-- MarkdownTOC -->
 
+- [Servlet总结](#servlet总结)
+- [阐述Servlet和CGI的区别?](#阐述servlet和cgi的区别)
+    - [CGI的不足之处:](#cgi的不足之处)
+    - [Servlet的优点：](#servlet的优点)
+- [Servlet接口中有哪些方法及Servlet生命周期探秘](#servlet接口中有哪些方法及servlet生命周期探秘)
+- [get和post请求的区别](#get和post请求的区别)
+- [什么情况下调用doGet\(\)和doPost\(\)](#什么情况下调用doget和dopost)
+- [转发（Forward）和重定向（Redirect）的区别](#转发forward和重定向redirect的区别)
+- [自动刷新\(Refresh\)](#自动刷新refresh)
+- [Servlet与线程安全](#servlet与线程安全)
+- [JSP和Servlet是什么关系](#jsp和servlet是什么关系)
+- [JSP工作原理](#jsp工作原理)
+- [JSP有哪些内置对象、作用分别是什么](#jsp有哪些内置对象、作用分别是什么)
+- [Request对象的主要方法有哪些](#request对象的主要方法有哪些)
+- [request.getAttribute\(\)和 request.getParameter\(\)有何区别](#requestgetattribute和-requestgetparameter有何区别)
+- [include指令include的行为的区别](#include指令include的行为的区别)
+- [JSP九大内置对象，七大动作，三大指令](#jsp九大内置对象，七大动作，三大指令)
+- [讲解JSP中的四种作用域](#讲解jsp中的四种作用域)
+- [如何实现JSP或Servlet的单线程模式](#如何实现jsp或servlet的单线程模式)
+- [实现会话跟踪的技术有哪些](#实现会话跟踪的技术有哪些)
+- [Cookie和Session的的区别](#cookie和session的的区别)
 
-下面的都是自己之前在学习JavaWeb的时候总结的，对于巩固JavaWeb的基础知识应该有很大帮助。后面还会把框架的面试题总结一下。
-## <font face="楷体">Servlet总结</font>：
+<!-- /MarkdownTOC -->
+
+## Servlet总结
 
 在Java Web程序中，**Servlet**主要负责接收用户请求**HttpServletRequest**,在**doGet()**,**doPost()**中做相应的处理，并将回应**HttpServletResponse**反馈给用户。Servlet可以设置初始化参数，供Servlet内部使用。一个Servlet类只会有一个实例，在它初始化时调用**init()方法**，销毁时调用**destroy()方法**。**Servlet需要在web.xml中配置**（MyEclipse中创建Servlet会自动配置），**一个Servlet可以设置多个URL访问**。**Servlet不是线程安全**，因此要谨慎使用类变量。
-## <font face="楷体">阐述Servlet和CGI的区别?</font>
 
-**CGI的不足之处：**
+## 阐述Servlet和CGI的区别?
+
+### CGI的不足之处:
 
 1，需要为每个请求启动一个操作CGI程序的系统进程。如果请求频繁，这将会带来很大的开销。
 
@@ -14,7 +38,7 @@
 
 3，需要重复编写处理网络协议的代码以及编码，这些工作都是非常耗时的。
 
-**Servlet的优点：**
+### Servlet的优点:
 
 1，只需要启动一个操作系统进程以及加载一个JVM，大大降低了系统的开销
 
@@ -28,8 +52,9 @@
 
 参考：《javaweb整合开发王者归来》P7
 
-## <font face="楷体">Servlet接口中有哪些方法及Servlet生命周期探秘</font>
+## Servlet接口中有哪些方法及Servlet生命周期探秘
 Servlet接口定义了5个方法，其中**前三个方法与Servlet生命周期相关**：
+
 - **void init(ServletConfig config) throws ServletException**
 - **void service(ServletRequest req, ServletResponse resp) throws ServletException, java.io.IOException**
 - **void destory()**
@@ -40,7 +65,7 @@ Servlet接口定义了5个方法，其中**前三个方法与Servlet生命周期
 
 参考：《javaweb整合开发王者归来》P81
 
-## <font face="楷体">get和post请求的区别？</font>
+## get和post请求的区别
 ①get请求用来从服务器上获得资源，而post是用来向服务器提交数据；
 
 ②get将表单中数据按照name=value的形式，添加到action 所指向的URL 后面，并且两者使用"?"连接，而各个变量之间使用"&"连接；post是将表单中的数据放在HTTP协议的请求头或消息体中，传递到action所指向URL；
@@ -54,10 +79,11 @@ Servlet接口定义了5个方法，其中**前三个方法与Servlet生命周期
 补充：GET方式提交表单的典型应用是搜索引擎。GET方式就是被设计为查询用的。
 
 
-## <font face="楷体">什么情况下调用doGet()和doPost()?</font>
+## 什么情况下调用doGet()和doPost()
 Form标签里的method的属性为get时调用doGet()，为post时调用doPost()。
 
-## <font face="楷体">转发（Forward）和重定向（Redirect）的区别？</font>
+## 转发(Forward)和重定向(Redirect)的区别
+
 **转发是服务器行为，重定向是客户端行为。**
 
 **转发（Forword）**
@@ -87,7 +113,7 @@ redirect:一般用于用户注销登陆时返回主页面和跳转到其它的�
 forward:高.
 redirect:低.
 
-## <font face="楷体">自动刷新（Refresh）</font>
+## 自动刷新(Refresh)
 自动刷新不仅可以实现一段时间之后自动跳转到另一个页面，还可以实现一段时间之后自动刷新本页面。Servlet中通过HttpServletResponse对象设置Header属性实现自动刷新例如：
 ```java
 Response.setHeader("Refresh","1000;URL=http://localhost:8080/servlet/example.htm");
@@ -95,7 +121,7 @@ Response.setHeader("Refresh","1000;URL=http://localhost:8080/servlet/example.htm
 其中1000为时间，单位为毫秒。URL指定就是要跳转的页面（如果设置自己的路径，就会实现没过一秒自动刷新本页面一次）
 
 
-## <font face="楷体">Servlet与线程安全</font>
+## Servlet与线程安全
 **Servlet不是线程安全的，多线程并发的读写会导致数据不同步的问题。** 解决的办法是尽量不要定义name属性，而是要把name变量分别定义在doGet()和doPost()方法内。虽然使用synchronized(name){}语句块可以解决问题，但是会造成线程的等待，不是很科学的办法。
 注意：多线程的并发的读写Servlet类属性会导致数据不同步。但是如果只是并发地读取属性而不写入，则不存在数据不同步的问题。因此Servlet里的只读属性最好定义为final类型的。
 
@@ -103,10 +129,10 @@ Response.setHeader("Refresh","1000;URL=http://localhost:8080/servlet/example.htm
 
 
 
-## <font face="楷体">JSP和Servlet是什么关系？</font>
+## JSP和Servlet是什么关系
 其实这个问题在上面已经阐述过了，Servlet是一个特殊的Java程序，它运行于服务器的JVM中，能够依靠服务器的支持向浏览器提供显示内容。JSP本质上是Servlet的一种简易形式，JSP会被服务器处理成一个类似于Servlet的Java程序，可以简化页面内容的生成。Servlet和JSP最主要的不同点在于，Servlet的应用逻辑是在Java文件中，并且完全从表示层中的HTML分离开来。而JSP的情况是Java和HTML可以组合成一个扩展名为.jsp的文件。有人说，Servlet就是在Java中写HTML，而JSP就是在HTML中写Java代码，当然这个说法是很片面且不够准确的。JSP侧重于视图，Servlet更侧重于控制逻辑，在MVC架构模式中，JSP适合充当视图（view）而Servlet适合充当控制器（controller）。
 
-## <font face="楷体">JSP工作原理：</font>
+## JSP工作原理
 JSP是一种Servlet，但是与HttpServlet的工作方式不太一样。HttpServlet是先由源代码编译为class文件后部署到服务器下，为先编译后部署。而JSP则是先部署后编译。JSP会在客户端第一次请求JSP文件时被编译为HttpJspPage类（接口Servlet的一个子类）。该类会被服务器临时存放在服务器工作目录里面。下面通过实例给大家介绍。
 工程JspLoginDemo下有一个名为login.jsp的Jsp文件，把工程第一次部署到服务器上后访问这个Jsp文件，我们发现这个目录下多了下图这两个东东。
 .class文件便是JSP对应的Servlet。编译完毕后再运行class文件来响应客户端请求。以后客户端访问login.jsp的时候，Tomcat将不再重新编译JSP文件，而是直接调用class文件来响应客户端请求。
@@ -119,7 +145,7 @@ JSP是一种Servlet，但是与HttpServlet的工作方式不太一样。HttpServ
 
 参考：《javaweb整合开发王者归来》P97
 
-## <font face="楷体">JSP有哪些内置对象？作用分别是什么？</font>
+## JSP有哪些内置对象、作用分别是什么
 [JSP内置对象 - CSDN博客 ](http://blog.csdn.net/qq_34337272/article/details/64310849 ) 
 
 JSP有9个内置对象：
@@ -134,7 +160,7 @@ JSP有9个内置对象：
 - exception：封装页面抛出异常的对象。
 
 
-## <font face="楷体">Request对象的主要方法有哪些？</font>
+## Request对象的主要方法有哪些
 - setAttribute(String name,Object)：设置名字为name的request 的参数值 
 - getAttribute(String name)：返回由name指定的属性值 
 - getAttributeNames()：返回request 对象所有属性的名字集合，结果是一个枚举的实例 
@@ -159,7 +185,7 @@ JSP有9个内置对象：
 - getServerPort()：获取服务器的端口号 
 - removeAttribute(String name)：删除请求中的一个属性 
 
-## <font face="楷体">request.getAttribute()和 request.getParameter()有何区别?</font>
+## request.getAttribute()和 request.getParameter()有何区别
 **从获取方向来看：**
 
 getParameter()是获取 POST/GET 传递的参数值；
@@ -182,17 +208,17 @@ getParameter 返回的是String,用于读取提交的表单中的值;（获取�
 
 getAttribute 返回的是Object，需进行转换,可用setAttribute 设置成任意对象，使用很灵活，可随时用
 
-## <font face="楷体">include指令include的行为的区别</font>
+## include指令include的行为的区别
 **include指令：** JSP可以通过include指令来包含其他文件。被包含的文件可以是JSP文件、HTML文件或文本文件。包含的文件就好像是该JSP文件的一部分，会被同时编译执行。 语法格式如下： 
 <%@ include file="文件相对 url 地址" %>
 
 i**nclude动作：** <jsp:include>动作元素用来包含静态和动态的文件。该动作把指定文件插入正在生成的页面。语法格式如下：
 <jsp:include page="相对 URL 地址" flush="true" />
 
-## <font face="楷体">JSP九大内置对象，七大动作，三大指令-</font>
+## JSP九大内置对象，七大动作，三大指令
 [JSP九大内置对象，七大动作，三大指令总结](http://blog.csdn.net/qq_34337272/article/details/64310849)
 
-## <font face="楷体">讲解JSP中的四种作用域</font>
+## 讲解JSP中的四种作用域
 JSP中的四种作用域包括page、request、session和application，具体来说：
 - **page**代表与一个页面相关的对象和属性。
 - **request**代表与Web客户机发出的一个请求相关的对象和属性。一个请求可能跨越多个页面，涉及多个Web组件；需要在页面显示的临时数据可以置于此作用域。
@@ -201,7 +227,7 @@ JSP中的四种作用域包括page、request、session和application，具体来
 
 
 
-## <font face="楷体">如何实现JSP或Servlet的单线程模式？</font>
+## 如何实现JSP或Servlet的单线程模式
 对于JSP页面，可以通过page指令进行设置。
 <%@page isThreadSafe=”false”%>
 
@@ -209,7 +235,7 @@ JSP中的四种作用域包括page、request、session和application，具体来
 
 说明：如果将JSP或Servlet设置成单线程工作模式，会导致每个请求创建一个Servlet实例，这种实践将导致严重的性能问题（服务器的内存压力很大，还会导致频繁的垃圾回收），所以通常情况下并不会这么做。
 
-## <font face="楷体">实现会话跟踪的技术有哪些？</font>
+## 实现会话跟踪的技术有哪些
 1. **使用Cookie**
 
 向客户端发送Cookie
@@ -259,12 +285,14 @@ if(cookies !=null){
 
 
  在所有会话跟踪技术中，HttpSession对象是最强大也是功能最多的。当一个用户第一次访问某个网站时会自动创建 HttpSession，每个用户可以访问他自己的HttpSession。可以通过HttpServletRequest对象的getSession方 法获得HttpSession，通过HttpSession的setAttribute方法可以将一个值放在HttpSession中，通过调用 HttpSession对象的getAttribute方法，同时传入属性名就可以获取保存在HttpSession中的对象。与上面三种方式不同的 是，HttpSession放在服务器的内存中，因此不要将过大的对象放在里面，即使目前的Servlet容器可以在内存将满时将HttpSession 中的对象移到其他存储设备中，但是这样势必影响性能。添加到HttpSession中的值可以是任意Java对象，这个对象最好实现了 Serializable接口，这样Servlet容器在必要的时候可以将其序列化到文件中，否则在序列化时就会出现异常。
-## <font face="楷体">Cookie和Session的的区别？</font>
+## Cookie和Session的的区别
 
 1. 由于HTTP协议是无状态的协议，所以服务端需要记录用户的状态时，就需要用某种机制来识具体的用户，这个机制就是Session.典型的场景比如购物车，当你点击下单按钮时，由于HTTP协议无状态，所以并不知道是哪个用户操作的，所以服务端要为特定的用户创建了特定的Session，用用于标识这个用户，并且跟踪用户，这样才知道购物车里面有几本书。这个Session是保存在服务端的，有一个唯一标识。在服务端保存Session的方法很多，内存、数据库、文件都有。集群的时候也要考虑Session的转移，在大型的网站，一般会有专门的Session服务器集群，用来保存用户会话，这个时候 Session 信息都是放在内存的，使用一些缓存服务比如Memcached之类的来放 Session。
 2. 思考一下服务端如何识别特定的客户？这个时候Cookie就登场了。每次HTTP请求的时候，客户端都会发送相应的Cookie信息到服务端。实际上大多数的应用都是用 Cookie 来实现Session跟踪的，第一次创建Session的时候，服务端会在HTTP协议中告诉客户端，需要在 Cookie 里面记录一个Session ID，以后每次请求把这个会话ID发送到服务器，我就知道你是谁了。有人问，如果客户端的浏览器禁用了 Cookie 怎么办？一般这种情况下，会使用一种叫做URL重写的技术来进行会话跟踪，即每次HTTP交互，URL后面都会被附加上一个诸如 sid=xxxxx 这样的参数，服务端据此来识别用户。
 3. Cookie其实还可以用在一些方便用户的场景下，设想你某次登陆过一个网站，下次登录的时候不想再次输入账号了，怎么办？这个信息可以写到Cookie里面，访问网站的时候，网站页面的脚本可以读取这个信息，就自动帮你把用户名给填了，能够方便一下用户。这也是Cookie名称的由来，给用户的一点甜头。所以，总结一下：Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。
 
+参考：
 
+https://www.zhihu.com/question/19786827/answer/28752144
 
-
+《javaweb整合开发王者归来》P158 Cookie和Session的比较
